@@ -1,0 +1,17 @@
+body {
+  text-align: center; }
+
+figure {
+  display: inline-block;
+  height: 225px;
+  margin: 5px 0px; }
+  figure img {
+    height: 100%;
+    max-width: 100%; }
+  figure .placeholder {
+    display: inline-block;
+    height: 100%;
+    width: 5px;
+    margin: 0px 3px; }
+
+/*# sourceMappingURL=main.css.map */
