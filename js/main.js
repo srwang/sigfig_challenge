@@ -1,31 +1,32 @@
-var urls = [
-	"img/1.png", 
-	"img/2.png", 
-	"img/3.png", 
-	"img/4.png", 
-	"img/5.png", 
-	"img/6.png", 
-	"img/7.png", 
-	"img/8.png", 
-	"img/9.png", 
-	"img/10.png"
+var images = [
+	{url: "img/1.png"}, 
+	{url: "img/2.png"}, 
+	{url: "img/3.png"}, 
+	{url: "img/4.png"}, 
+	{url: "img/5.png"}, 
+	{url: "img/6.png"},  
+	{url: "img/7.png"},  
+	{url: "img/8.png"}, 
+	{url: "img/9.png"}, 
+	{url: "img/10.png"}
 ];
 
-//creating imgs
 var body = document.querySelector('body');
 
-urls.forEach(function(url){
+//creating imgs
+images.forEach(function(image){
 	var figure = document.createElement('figure'),
 		img = document.createElement('img'),
 		coverUp = document.createElement('div');
 
-	img.setAttribute('src', url);
+	img.setAttribute('src', image.url);
 
-	//create draggable transculent cover to attach icon
+	//create draggable transculent cover 
 	coverUp.setAttribute('class', 'coverup');
 	coverUp.setAttribute('draggable', 'true');
 	coverUp.setAttribute('droppable', 'true');
 
+	//figure to bundle img and cover
 	figure.appendChild(img);
 	figure.appendChild(coverUp);
 
@@ -33,7 +34,6 @@ urls.forEach(function(url){
 });
 
 //drag functions
-
 (function(){
 	var dragged,
 		placeholder;
@@ -45,7 +45,7 @@ urls.forEach(function(url){
 		ev.dataTransfer.setDragImage(imgClone, 50, 100);
 
 		dragged = ev.target.parentNode;
-		//take img out of page flow
+		//take actual img out of page flow
 		setTimeout(function(){
 			dragged.setAttribute('class', 'dragged');
 		}, 10);
@@ -64,73 +64,41 @@ urls.forEach(function(url){
 
 	document.addEventListener('dragenter', function(ev) {
 
-		if (ev.target.parentNode.className !== 'placeholder' && ev.target.parentNode !== dragged && ev.target.className === 'coverup') {
-			console.log('entering', ev.target)
+		var existingHolder = document.querySelector('.placeholder');
 
-			ev.target.style.border = '5px solid blue';
+		//prevent from generating several placeholders
+		if (!existingHolder && ev.target.parentNode.className !== 'placeholder' && ev.target.parentNode !== dragged && ev.target.className === 'coverup') {
 
-			var placeholderEnter = dragged.cloneNode(true);
-			placeholderEnter.className = 'placeholder';
+			placeholder = dragged.cloneNode(true);
+			placeholder.className = 'placeholder';
 
-			body.insertBefore(placeholderEnter, ev.target.parentNode.nextSibling);
-
-			placeholder = placeholderEnter;
+			setTimeout(function(){//prevent from immediately triggering dragleave
+				body.insertBefore(placeholder, ev.target.parentNode.nextSibling);
+			}, 10)
 		} 
 	}, false);
 
 	document.addEventListener('dragleave', function(ev) {
 
-		console.log('leaving');
-
-		ev.target.style.border = 'none';
-
-		if (placeholder.parentNode) {
-
-			console.log('removing');
+		if (placeholder.parentNode) {//if currently appended
 			placeholder.parentNode.removeChild(placeholder);
 		}
 	}, false);
 
 	document.addEventListener('drop', function(ev){
-		//ev.preventDefault();
 
-		var placeholderDrop = document.querySelector('.placeholder');
-
-		if (placeholderDrop) {
+		if (placeholder.parentNode) { 
 			dragged.parentNode.removeChild(dragged);
-			placeholderDrop.removeAttribute('class');
-		} else {
-			//show original image
+			placeholder.removeAttribute('class');
+		} else {//show original image
 			dragged.removeAttribute('class');
 		}
 	}, false);
 
 })();
 
-
-//drag 
-	//attach img icon
-	//attached 'drag' class to original
-//d
-
-//attach drag styles as classes 
+//set placeholder to add when event on body, not specific image?
 
 
-// var xhr = new XMLHttpRequest();
-// xhr.open('GET', 'js/images.json');
-// xhr.send(null);
 
-// xhr.onreadystatechange = function () {
-// 	if (xhr.readyState === 4) {
-// 		if (xhr.status === 200) {
-// 			var urls = Json.parse(xhr.responseText).images; 
 
-// 			debugger
-// 			urls.forEach(function(url){
-// 				$('body').append('<figure><img src="' + url + '"></img></figure>')
-// 			});
-// 		} else {
-// 			console.log('Error: ' + xhr.status); 
-// 		}
-// 	}
-// }
