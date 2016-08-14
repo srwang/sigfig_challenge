@@ -1,24 +1,54 @@
-$el-height : 225px;
+$el-height : 240px;
 
 body {
-	text-align: center;
+	display: flex;
+	//justify-content: center;
+	flex-wrap: wrap;
 }
 
 figure {
 	display: inline-block;
 	height: $el-height;
-	margin: 5px 0px;
+	margin: 5px;
+	position: relative;
 
 	img {
 		height: 100%;
 		max-width: 100%;
 	}
 
-	.placeholder {
-		display: inline-block;
-		height: 100%;
-		width: 5px;
-		margin: 0px 3px;
+	.coverup {
+		opacity: 0;
+		position: absolute;
+		top: 0;
+		height: $el-height;
+		width: 100%;
+		z-index: 1;
+	}
+}
+
+.empty {
+	height: $el-height;
+	width: 10px;
+	display: inline-block;
+}
+
+.dragged {
+	margin: 0px;
+
+	img {
+		display: none;
+	}
+}
+
+.placeholder {
+	img {
+		opacity: 0.7;
+	}
+
+	.coverup {
+		opacity: 0.2;
+		background-color: blue;
 	}
 }
 
